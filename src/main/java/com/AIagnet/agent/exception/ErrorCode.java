@@ -39,6 +39,7 @@ public enum ErrorCode {
     AI_AGENT_CONNECTION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "A001", "AI 에이전트 서버에 연결할 수 없습니다."),
     AI_AGENT_RESPONSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "A002", "AI 에이전트 응답 처리 중 오류가 발생했습니다.");
 
+
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
