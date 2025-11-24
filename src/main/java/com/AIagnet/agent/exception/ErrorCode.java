@@ -22,6 +22,18 @@ public enum ErrorCode {
     EMPLOYEE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "E002", "이미 존재하는 사번입니다."),
     EMPLOYEE_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E003", "이미 존재하는 이메일입니다."),
 
+    // Schedule (2500번대)
+    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "일정을 찾을 수 없습니다."),
+    SCHEDULE_TIME_CONFLICT(HttpStatus.CONFLICT, "S002", "해당 시간에 이미 일정이 존재합니다."),
+    SCHEDULE_TIME_INVALID(HttpStatus.BAD_REQUEST, "S003", "시작 시간은 종료 시간보다 빨라야 합니다."),
+    SCHEDULE_CONFIRMATION_REQUIRED(HttpStatus.BAD_REQUEST, "S004", "사용자 확인이 필요합니다."),
+    SCHEDULE_ALREADY_CANCELLED(HttpStatus.CONFLICT, "S005", "이미 취소된 일정입니다."),
+
+    // Leave (2600번대)
+    LEAVE_BALANCE_NOT_FOUND(HttpStatus.NOT_FOUND, "L001", "연차 데이터를 찾을 수 없습니다."),
+    LEAVE_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "L002", "연차 신청을 찾을 수 없습니다."),
+    LEAVE_REQUEST_ALREADY_APPROVED(HttpStatus.CONFLICT, "L003", "이미 승인된 연차 신청입니다."),
+
     // MeetingRoom (3000번대)
     MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "회의실을 찾을 수 없습니다."),
     MEETING_ROOM_NOT_AVAILABLE(HttpStatus.CONFLICT, "M002", "해당 시간대에 예약 가능한 회의실이 없습니다."),

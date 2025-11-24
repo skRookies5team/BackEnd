@@ -65,8 +65,8 @@ public class Employee {
     private Integer performanceScore;
 
     /** 평가 등급 */
-    @Column(name = "evaluation_grade")
-    private Integer evaluationGrade;
+    @Column(name = "evaluation_grade", length = 50)
+    private String evaluationGrade;
 
     /** 직급 */
     @Column(name = "position", length = 100)

@@ -1,7 +1,6 @@
 package com.AIagnet.agent.schedule.repository;
 
 import com.AIagnet.agent.schedule.entity.Schedule;
-import com.AIagnet.agent.schedule.entity.ScheduleStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,11 +21,12 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     boolean existsOverlap(@Param("employeeId") Integer employeeId,
                           @Param("startTime") LocalDateTime startTime,
                           @Param("endTime") LocalDateTime endTime,
-                          @Param("status") ScheduleStatus status);
+                          @Param("status") String status);
 
     @Query("""
             SELECT s
             FROM Schedule s
+            JOIN FETCH s.employee
             WHERE s.employee.employeeId = :employeeId
               AND s.status = :status
               AND (:startTime IS NULL OR s.endTime >= :startTime)
@@ -36,21 +36,39 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     List<Schedule> findByEmployeeAndRange(@Param("employeeId") Integer employeeId,
                                           @Param("startTime") LocalDateTime startTime,
                                           @Param("endTime") LocalDateTime endTime,
-                                          @Param("status") ScheduleStatus status);
-
-    List<Schedule> findByEmployeeEmployeeIdAndStatusOrderByStartTimeAsc(Integer employeeId, ScheduleStatus status);
+                                          @Param("status") String status);
 
     @Query("""
             SELECT s
             FROM Schedule s
+            JOIN FETCH s.employee
+            WHERE s.employee.employeeId = :employeeId
+              AND s.status = :status
+            ORDER BY s.startTime ASC
+            """)
+    List<Schedule> findByEmployeeEmployeeIdAndStatusOrderByStartTimeAsc(@Param("employeeId") Integer employeeId,
+                                                                          @Param("status") String status);
+
+    @Query("""
+            SELECT s
+            FROM Schedule s
+            JOIN FETCH s.employee
             WHERE s.status = :status
               AND (:startTime IS NULL OR s.endTime >= :startTime)
               AND (:endTime IS NULL OR s.startTime <= :endTime)
             ORDER BY s.startTime ASC
             """)
-    List<Schedule> findByStatusAndRange(@Param("status") ScheduleStatus status,
-                                        @Param("startTime") LocalDateTime startTime,
-                                        @Param("endTime") LocalDateTime endTime);
+    List<Schedule> findByStatusAndRange(@Param("status") String status,
+                                       @Param("startTime") LocalDateTime startTime,
+                                       @Param("endTime") LocalDateTime endTime);
+
+    @Query("""
+            SELECT s
+            FROM Schedule s
+            JOIN FETCH s.employee
+            WHERE s.scheduleId = :scheduleId
+            """)
+    java.util.Optional<Schedule> findByIdWithEmployee(@Param("scheduleId") Integer scheduleId);
 }
 
 

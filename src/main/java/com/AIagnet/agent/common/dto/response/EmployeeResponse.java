@@ -46,7 +46,7 @@ public class EmployeeResponse {
     private Integer performanceScore;
 
     /** 평가 등급 */
-    private Integer evaluationGrade;
+    private String evaluationGrade;
 
     /** 직급 */
     private String position;
