@@ -11,7 +11,6 @@ import com.AIagnet.agent.schedule.dto.request.ScheduleSearchRequest;
 import com.AIagnet.agent.schedule.dto.response.ScheduleRecommendResponse;
 import com.AIagnet.agent.schedule.dto.response.ScheduleResponse;
 import com.AIagnet.agent.schedule.entity.Schedule;
-import com.AIagnet.agent.schedule.entity.ScheduleStatus;
 import com.AIagnet.agent.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,7 @@ public class ScheduleService {
      * 일정 조회.
      */
     public List<ScheduleResponse> scanSchedules(ScheduleSearchRequest request) {
-        ScheduleStatus status = Optional.ofNullable(request.getStatus()).orElse(ScheduleStatus.ACTIVE);
+        String status = Optional.ofNullable(request.getStatus()).orElse("활성");
 
         List<Schedule> schedules;
         if (request.getEmployeeId() != null) {
@@ -73,7 +72,7 @@ public class ScheduleService {
                 employee.getEmployeeId(),
                 request.getStartTime(),
                 request.getEndTime(),
-                ScheduleStatus.ACTIVE
+                "활성"
         );
 
         if (hasConflict) {
@@ -89,7 +88,7 @@ public class ScheduleService {
                 .scheduleType(request.getScheduleType())
                 .location(request.getLocation())
                 .alertTime(request.getAlertTime())
-                .status(ScheduleStatus.ACTIVE)
+                .status("활성")
                 .build();
 
         Schedule saved = scheduleRepository.save(schedule);
@@ -104,14 +103,14 @@ public class ScheduleService {
     public ScheduleResponse cancelSchedule(Integer scheduleId, ScheduleCancelRequest request) {
         validateConfirmation(request.getConfirmed(), "일정 취소는 사용자 확인이 필요합니다.");
 
-        Schedule schedule = scheduleRepository.findById(scheduleId)
+        Schedule schedule = scheduleRepository.findByIdWithEmployee(scheduleId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_NOT_FOUND, "일정을 찾을 수 없습니다."));
 
-        if (schedule.getStatus() == ScheduleStatus.CANCELLED) {
+        if ("취소".equals(schedule.getStatus())) {
             throw new BusinessException(ErrorCode.SCHEDULE_ALREADY_CANCELLED, "이미 취소된 일정입니다.");
         }
 
-        schedule.setStatus(ScheduleStatus.CANCELLED);
+        schedule.setStatus("취소");
         if (request.getReason() != null && !request.getReason().isBlank()) {
             String desc = schedule.getDescription() == null ? "" : schedule.getDescription() + "\n";
             schedule.setDescription(desc + "[취소 사유] " + request.getReason());
@@ -133,7 +132,7 @@ public class ScheduleService {
         validateTimeRange(preferredStart, preferredEnd);
 
         List<Schedule> schedules = scheduleRepository
-                .findByEmployeeEmployeeIdAndStatusOrderByStartTimeAsc(employee.getEmployeeId(), ScheduleStatus.ACTIVE);
+                .findByEmployeeEmployeeIdAndStatusOrderByStartTimeAsc(employee.getEmployeeId(), "활성");
 
         Schedule conflict = schedules.stream()
                 .filter(s -> overlaps(preferredStart, preferredEnd, s.getStartTime(), s.getEndTime()))

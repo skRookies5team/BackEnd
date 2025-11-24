@@ -29,9 +29,9 @@ public class LeaveBalanceService {
      */
     public LeaveBalanceResponse getLeaveBalance(Integer employeeId, Integer year) {
         LeaveBalance balance = (year != null)
-                ? leaveBalanceRepository.findByIdEmployeeIdAndIdYear(employeeId, year)
+                ? leaveBalanceRepository.findByEmployeeIdAndYear(employeeId, year)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LEAVE_BALANCE_NOT_FOUND, "해당 연도의 연차 데이터를 찾을 수 없습니다."))
-                : leaveBalanceRepository.findFirstByIdEmployeeIdOrderByIdYearDesc(employeeId)
+                : leaveBalanceRepository.findFirstByEmployeeIdOrderByYearDesc(employeeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LEAVE_BALANCE_NOT_FOUND, "연차 데이터가 존재하지 않습니다."));
 
         log.info("연차 잔여일 조회: employeeId={}, year={}", balance.getEmployeeId(), balance.getYear());
@@ -45,13 +45,13 @@ public class LeaveBalanceService {
         List<LeaveBalance> balances;
 
         if (employeeId != null && year != null) {
-            balances = leaveBalanceRepository.findByIdEmployeeIdAndIdYear(employeeId, year)
+            balances = leaveBalanceRepository.findByEmployeeIdAndYear(employeeId, year)
                     .map(List::of)
                     .orElse(List.of());
         } else if (employeeId != null) {
-            balances = leaveBalanceRepository.findByIdEmployeeIdOrderByIdYearDesc(employeeId);
+            balances = leaveBalanceRepository.findByEmployeeIdOrderByYearDesc(employeeId);
         } else if (year != null) {
-            balances = leaveBalanceRepository.findByIdYearOrderByIdEmployeeIdAsc(year);
+            balances = leaveBalanceRepository.findByYearOrderByEmployeeIdAsc(year);
         } else {
             balances = leaveBalanceRepository.findAll();
         }
