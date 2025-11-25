@@ -3,6 +3,7 @@ package com.AIagnet.agent.sales.controller;
 import com.AIagnet.agent.sales.dto.request.CompanySalesSearchRequest;
 import com.AIagnet.agent.sales.dto.response.CompanySalesResponse;
 import com.AIagnet.agent.sales.service.CompanySalesService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/sales")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "매출 관리", description = "회사 매출 조회, 분석 API")
 public class CompanySalesController {
 
     private final CompanySalesService companySalesService;

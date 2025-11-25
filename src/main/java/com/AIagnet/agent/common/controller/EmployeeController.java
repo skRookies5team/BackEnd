@@ -2,6 +2,7 @@ package com.AIagnet.agent.common.controller;
 
 import com.AIagnet.agent.common.dto.response.EmployeeResponse;
 import com.AIagnet.agent.common.service.EmployeeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "직원 관리", description = "직원 정보 조회 API")
 public class EmployeeController {
 
     private final EmployeeService employeeService;

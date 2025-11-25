@@ -6,6 +6,7 @@ import com.AIagnet.agent.meetingroom.dto.request.ReservationSearchRequest;
 import com.AIagnet.agent.meetingroom.dto.request.ReservationUpdateRequest;
 import com.AIagnet.agent.meetingroom.dto.response.ReservationResponse;
 import com.AIagnet.agent.meetingroom.service.ReservationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "회의실 예약", description = "회의실 예약 관리 API")
 public class ReservationController {
 
     private final ReservationService reservationService;

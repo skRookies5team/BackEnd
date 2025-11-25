@@ -2,6 +2,7 @@ package com.AIagnet.agent.costing.controller;
 
 import com.AIagnet.agent.costing.dto.response.ActivityBasedCostingResponse;
 import com.AIagnet.agent.costing.service.ActivityBasedCostingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/costing/activities")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "활동기준원가", description = "활동기준원가 분석 API")
 public class ActivityBasedCostingController {
 
     private final ActivityBasedCostingService activityBasedCostingService;

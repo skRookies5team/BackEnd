@@ -1,12 +1,10 @@
 package com.AIagnet.agent.businesstrip.controller;
 
-import com.AIagnet.agent.businesstrip.dto.BusinessTripChatRequest;
-import com.AIagnet.agent.businesstrip.dto.BusinessTripChatResponse;
 import com.AIagnet.agent.businesstrip.dto.request.BusinessTripCreateRequest;
 import com.AIagnet.agent.businesstrip.dto.request.BusinessTripSearchRequest;
 import com.AIagnet.agent.businesstrip.dto.response.BusinessTripResponse;
-import com.AIagnet.agent.businesstrip.service.BusinessTripProxyService;
 import com.AIagnet.agent.businesstrip.service.BusinessTripService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,39 +31,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@Tag(name = "출장 관리", description = "출장 조회, 생성, 삭제 API")
 public class BusinessTripController {
 
-    private final BusinessTripProxyService businessTripProxyService;
     private final BusinessTripService businessTripService;
-
-    /**
-     * 출장 챗봇 POST 엔드포인트 (FastAPI 프록시).
-     *
-     * @param request 출장 질의 요청
-     * @return FastAPI 응답
-     */
-    @PostMapping("/chat")
-    public ResponseEntity<BusinessTripChatResponse> chat(@Valid @RequestBody BusinessTripChatRequest request) {
-        log.info("POST /api/business-trips/chat - query={}", request.getQuery());
-        BusinessTripChatResponse response = businessTripProxyService.queryBusinessTrip(request);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 출장 챗봇 GET 엔드포인트 (질의 파라미터 버전).
-     *
-     * @param query 질의 문장 (필수)
-     * @return FastAPI 응답
-     */
-    @GetMapping("/chat")
-    public ResponseEntity<BusinessTripChatResponse> getBusinessTripChat(@RequestParam("query") String query) {
-        log.info("GET /api/business-trips/chat - query={}", query);
-        BusinessTripChatRequest request = BusinessTripChatRequest.builder()
-                .query(query)
-                .build();
-        BusinessTripChatResponse response = businessTripProxyService.queryBusinessTrip(request);
-        return ResponseEntity.ok(response);
-    }
 
     // ========== 출장 관리 CRUD 엔드포인트 ==========
 

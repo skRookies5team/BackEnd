@@ -2,6 +2,7 @@ package com.AIagnet.agent.mobiledevice.controller;
 
 import com.AIagnet.agent.mobiledevice.dto.response.MobileDeviceResponse;
 import com.AIagnet.agent.mobiledevice.service.MobileDeviceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/mobile-devices")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "모바일 기기", description = "모바일 기기 정보 조회 API")
 public class MobileDeviceController {
 
     private final MobileDeviceService mobileDeviceService;

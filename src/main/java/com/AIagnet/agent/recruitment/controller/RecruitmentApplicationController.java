@@ -3,6 +3,7 @@ package com.AIagnet.agent.recruitment.controller;
 import com.AIagnet.agent.recruitment.dto.request.RecruitmentApplicationSearchRequest;
 import com.AIagnet.agent.recruitment.dto.response.RecruitmentApplicationResponse;
 import com.AIagnet.agent.recruitment.service.RecruitmentApplicationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/recruitment/applications")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "채용 관리", description = "채용 지원서 조회 API")
 public class RecruitmentApplicationController {
 
     private final RecruitmentApplicationService recruitmentApplicationService;
