@@ -51,3 +51,4 @@ public interface BusinessTripRepository extends JpaRepository<BusinessTrip, Inte
     Optional<BusinessTrip> findByIdWithEmployee(@Param("tripId") Integer tripId);
 }
 
+
