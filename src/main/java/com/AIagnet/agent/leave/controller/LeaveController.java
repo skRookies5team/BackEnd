@@ -1,8 +1,6 @@
 package com.AIagnet.agent.leave.controller;
 
 import com.AIagnet.agent.leave.dto.LeaveBalanceResponse;
-import com.AIagnet.agent.leave.dto.LeaveChatRequest;
-import com.AIagnet.agent.leave.dto.LeaveChatResponse;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestCreateRequest;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestSearchRequest;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestUpdateRequest;
@@ -10,8 +8,8 @@ import com.AIagnet.agent.leave.dto.response.LeaveRequestResponse;
 import com.AIagnet.agent.leave.entity.LeaveRequest.LeaveRequestStatus;
 import com.AIagnet.agent.leave.entity.LeaveRequest.LeaveType;
 import com.AIagnet.agent.leave.service.LeaveBalanceService;
-import com.AIagnet.agent.leave.service.LeaveProxyService;
 import com.AIagnet.agent.leave.service.LeaveRequestService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +38,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@Tag(name = "연차 관리", description = "연차 잔여일 조회, 신청 API")
 public class LeaveController {
 
     private final LeaveBalanceService leaveBalanceService;
-    private final LeaveProxyService leaveProxyService;
     private final LeaveRequestService leaveRequestService;
 
     /**
@@ -68,35 +66,6 @@ public class LeaveController {
     ) {
         log.info("GET /api/leave/balance - employeeId={}, year={}", employeeId, year);
         return ResponseEntity.ok(leaveBalanceService.getLeaveBalance(employeeId, year));
-    }
-
-    /**
-     * 연차 챗봇 POST 엔드포인트 (FastAPI 프록시).
-     *
-     * @param request 연차 질의 요청
-     * @return FastAPI 응답
-     */
-    @PostMapping("/chat")
-    public ResponseEntity<LeaveChatResponse> chat(@Valid @RequestBody LeaveChatRequest request) {
-        log.info("POST /api/leave/chat - query={}", request.getQuery());
-        LeaveChatResponse response = leaveProxyService.queryLeave(request);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 연차 챗봇 GET 엔드포인트 (질의 파라미터 버전).
-     *
-     * @param query 질의 문장 (필수)
-     * @return FastAPI 응답
-     */
-    @GetMapping("/chat")
-    public ResponseEntity<LeaveChatResponse> getLeaveChat(@RequestParam("query") String query) {
-        log.info("GET /api/leave/chat - query={}", query);
-        LeaveChatRequest request = LeaveChatRequest.builder()
-                .query(query)
-                .build();
-        LeaveChatResponse response = leaveProxyService.queryLeave(request);
-        return ResponseEntity.ok(response);
     }
 
     // ========== 연차 신청 관련 엔드포인트 ==========

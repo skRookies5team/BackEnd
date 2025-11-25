@@ -3,6 +3,7 @@ package com.AIagnet.agent.spend.controller;
 import com.AIagnet.agent.spend.dto.request.SpendTransactionSearchRequest;
 import com.AIagnet.agent.spend.dto.response.SpendTransactionResponse;
 import com.AIagnet.agent.spend.service.SpendTransactionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/spend/transactions")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "지출 관리", description = "지출 거래 조회 API")
 public class SpendTransactionController {
 
     private final SpendTransactionService spendTransactionService;

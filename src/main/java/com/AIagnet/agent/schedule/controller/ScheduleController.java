@@ -1,15 +1,13 @@
 package com.AIagnet.agent.schedule.controller;
 
-import com.AIagnet.agent.schedule.dto.ScheduleChatRequest;
-import com.AIagnet.agent.schedule.dto.ScheduleChatResponse;
 import com.AIagnet.agent.schedule.dto.request.ScheduleCancelRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleCreateRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleRecommendRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleSearchRequest;
 import com.AIagnet.agent.schedule.dto.response.ScheduleRecommendResponse;
 import com.AIagnet.agent.schedule.dto.response.ScheduleResponse;
-import com.AIagnet.agent.schedule.service.ScheduleProxyService;
 import com.AIagnet.agent.schedule.service.ScheduleService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,39 +33,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@Tag(name = "일정 관리", description = "일정 조회, 생성, 취소 API")
 public class ScheduleController {
 
-    private final ScheduleProxyService scheduleProxyService;
     private final ScheduleService scheduleService;
-
-    /**
-     * 일정 챗봇 POST 엔드포인트 (FastAPI 프록시).
-     *
-     * @param request 일정 질의 요청
-     * @return FastAPI 응답
-     */
-    @PostMapping("/chat")
-    public ResponseEntity<ScheduleChatResponse> chat(@Valid @RequestBody ScheduleChatRequest request) {
-        log.info("POST /api/schedule/chat - query={}", request.getQuery());
-        ScheduleChatResponse response = scheduleProxyService.querySchedule(request);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 일정 챗봇 GET 엔드포인트 (질의 파라미터 버전).
-     *
-     * @param query 질의 문장
-     * @return FastAPI 응답
-     */
-    @GetMapping("/chat")
-    public ResponseEntity<ScheduleChatResponse> getScheduleChat(@RequestParam("query") String query) {
-        log.info("GET /api/schedule/chat - query={}", query);
-        ScheduleChatRequest request = ScheduleChatRequest.builder()
-                .query(query)
-                .build();
-        ScheduleChatResponse response = scheduleProxyService.querySchedule(request);
-        return ResponseEntity.ok(response);
-    }
 
     // ========== 일정 관리 CRUD 엔드포인트 ==========
 

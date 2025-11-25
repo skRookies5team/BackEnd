@@ -4,6 +4,7 @@ import com.AIagnet.agent.approval.dto.request.ApprovalDocumentCreateRequest;
 import com.AIagnet.agent.approval.dto.request.ApprovalDocumentSearchRequest;
 import com.AIagnet.agent.approval.dto.response.ApprovalDocumentResponse;
 import com.AIagnet.agent.approval.service.ApprovalDocumentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
+@Tag(name = "결재 관리", description = "결재 문서 조회, 생성 API")
 public class ApprovalDocumentController {
 
     private final ApprovalDocumentService approvalDocumentService;
