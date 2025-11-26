@@ -1,6 +1,8 @@
 package com.AIagnet.agent.leave.controller;
 
 import com.AIagnet.agent.leave.dto.LeaveBalanceResponse;
+import com.AIagnet.agent.leave.dto.LeaveChatRequest;
+import com.AIagnet.agent.leave.dto.LeaveChatResponse;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestCreateRequest;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestSearchRequest;
 import com.AIagnet.agent.leave.dto.request.LeaveRequestUpdateRequest;
@@ -8,6 +10,7 @@ import com.AIagnet.agent.leave.dto.response.LeaveRequestResponse;
 import com.AIagnet.agent.leave.entity.LeaveRequest.LeaveRequestStatus;
 import com.AIagnet.agent.leave.entity.LeaveRequest.LeaveType;
 import com.AIagnet.agent.leave.service.LeaveBalanceService;
+import com.AIagnet.agent.leave.service.LeaveProxyService;
 import com.AIagnet.agent.leave.service.LeaveRequestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,11 +41,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "연차 관리", description = "연차 잔여일 조회, 신청 API")
+@Tag(name = "연차 관리", description = "연차 잔여일 조회, 신청, AI 챗봇 API")
 public class LeaveController {
 
     private final LeaveBalanceService leaveBalanceService;
     private final LeaveRequestService leaveRequestService;
+    private final LeaveProxyService leaveProxyService;
 
     /**
      * 연차 잔여일 목록 조회.
@@ -136,6 +140,19 @@ public class LeaveController {
         log.info("DELETE /api/leave/requests/{}", id);
         leaveRequestService.deleteLeaveRequest(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // ========== 연차 챗봇 엔드포인트 ==========
+
+    /**
+     * 연차 챗봇 (FastAPI 연동).
+     */
+    @PostMapping("/chat")
+    public ResponseEntity<LeaveChatResponse> chat(
+            @Valid @RequestBody LeaveChatRequest request
+    ) {
+        log.info("POST /api/leave/chat - query={}, employeeId={}", request.getQuery(), request.getEmployeeId());
+        return ResponseEntity.ok(leaveProxyService.chat(request));
     }
 }
 

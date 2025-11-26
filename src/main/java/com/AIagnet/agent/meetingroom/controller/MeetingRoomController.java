@@ -1,8 +1,11 @@
 package com.AIagnet.agent.meetingroom.controller;
 
+import com.AIagnet.agent.meetingroom.dto.MeetingRoomChatRequest;
+import com.AIagnet.agent.meetingroom.dto.MeetingRoomChatResponse;
 import com.AIagnet.agent.meetingroom.dto.request.MeetingRoomSearchRequest;
 import com.AIagnet.agent.meetingroom.dto.response.MeetingRoomRecommendResponse;
 import com.AIagnet.agent.meetingroom.dto.response.MeetingRoomResponse;
+import com.AIagnet.agent.meetingroom.service.MeetingRoomProxyService;
 import com.AIagnet.agent.meetingroom.service.MeetingRoomService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,10 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "회의실 관리", description = "회의실 조회, 예약, 추천 API")
+@Tag(name = "회의실 관리", description = "회의실 조회, 예약, 추천, AI 챗봇 API")
 public class MeetingRoomController {
 
     private final MeetingRoomService meetingRoomService;
+    private final MeetingRoomProxyService meetingRoomProxyService;
 
     // ========== 회의실 관리 엔드포인트 ==========
 
@@ -89,5 +93,18 @@ public class MeetingRoomController {
         log.info("GET /api/meeting-rooms/recommend - 회의실 추천: {}", request);
         MeetingRoomRecommendResponse response = meetingRoomService.recommendMeetingRooms(request);
         return ResponseEntity.ok(response);
+    }
+
+    // ========== 회의실 챗봇 엔드포인트 ==========
+
+    /**
+     * 회의실 챗봇 (FastAPI 연동).
+     */
+    @PostMapping("/chat")
+    public ResponseEntity<MeetingRoomChatResponse> chat(
+            @Valid @RequestBody MeetingRoomChatRequest request
+    ) {
+        log.info("POST /api/meeting-rooms/chat - query={}, employeeId={}", request.getQuery(), request.getEmployeeId());
+        return ResponseEntity.ok(meetingRoomProxyService.chat(request));
     }
 }
