@@ -1,11 +1,14 @@
 package com.AIagnet.agent.schedule.controller;
 
+import com.AIagnet.agent.schedule.dto.ScheduleChatRequest;
+import com.AIagnet.agent.schedule.dto.ScheduleChatResponse;
 import com.AIagnet.agent.schedule.dto.request.ScheduleCancelRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleCreateRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleRecommendRequest;
 import com.AIagnet.agent.schedule.dto.request.ScheduleSearchRequest;
 import com.AIagnet.agent.schedule.dto.response.ScheduleRecommendResponse;
 import com.AIagnet.agent.schedule.dto.response.ScheduleResponse;
+import com.AIagnet.agent.schedule.service.ScheduleProxyService;
 import com.AIagnet.agent.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,10 +36,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "일정 관리", description = "일정 조회, 생성, 취소 API")
+@Tag(name = "일정 관리", description = "일정 조회, 생성, 취소, AI 챗봇 API")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final ScheduleProxyService scheduleProxyService;
 
     // ========== 일정 관리 CRUD 엔드포인트 ==========
 
@@ -91,6 +95,19 @@ public class ScheduleController {
     ) {
         log.info("POST /api/schedule/recommend - employeeId={}", request.getEmployeeId());
         return ResponseEntity.ok(scheduleService.recommendSchedule(request));
+    }
+
+    // ========== 일정 챗봇 엔드포인트 ==========
+
+    /**
+     * 일정 챗봇 (FastAPI 연동).
+     */
+    @PostMapping("/chat")
+    public ResponseEntity<ScheduleChatResponse> chat(
+            @Valid @RequestBody ScheduleChatRequest request
+    ) {
+        log.info("POST /api/schedule/chat - query={}, employeeId={}", request.getQuery(), request.getEmployeeId());
+        return ResponseEntity.ok(scheduleProxyService.chat(request));
     }
 }
 

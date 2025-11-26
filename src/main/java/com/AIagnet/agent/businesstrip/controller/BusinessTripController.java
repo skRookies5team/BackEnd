@@ -1,8 +1,11 @@
 package com.AIagnet.agent.businesstrip.controller;
 
+import com.AIagnet.agent.businesstrip.dto.BusinessTripChatRequest;
+import com.AIagnet.agent.businesstrip.dto.BusinessTripChatResponse;
 import com.AIagnet.agent.businesstrip.dto.request.BusinessTripCreateRequest;
 import com.AIagnet.agent.businesstrip.dto.request.BusinessTripSearchRequest;
 import com.AIagnet.agent.businesstrip.dto.response.BusinessTripResponse;
+import com.AIagnet.agent.businesstrip.service.BusinessTripProxyService;
 import com.AIagnet.agent.businesstrip.service.BusinessTripService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,10 +34,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "출장 관리", description = "출장 조회, 생성, 삭제 API")
+@Tag(name = "출장 관리", description = "출장 조회, 생성, 삭제, AI 챗봇 API")
 public class BusinessTripController {
 
     private final BusinessTripService businessTripService;
+    private final BusinessTripProxyService businessTripProxyService;
 
     // ========== 출장 관리 CRUD 엔드포인트 ==========
 
@@ -86,5 +90,18 @@ public class BusinessTripController {
         log.info("DELETE /api/business-trips/{}", tripId);
         businessTripService.deleteBusinessTrip(tripId);
         return ResponseEntity.noContent().build();
+    }
+
+    // ========== 출장 챗봇 엔드포인트 ==========
+
+    /**
+     * 출장 챗봇 (FastAPI 연동).
+     */
+    @PostMapping("/chat")
+    public ResponseEntity<BusinessTripChatResponse> chat(
+            @Valid @RequestBody BusinessTripChatRequest request
+    ) {
+        log.info("POST /api/business-trips/chat - query={}, employeeId={}", request.getQuery(), request.getEmployeeId());
+        return ResponseEntity.ok(businessTripProxyService.chat(request));
     }
 }
