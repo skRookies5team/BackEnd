@@ -41,7 +41,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "연차 관리", description = "연차 잔여일 조회, 신청, AI 챗봇 API")
+@Tag(name = "Leave", description = "연차/휴가 관리 API")
 public class LeaveController {
 
     private final LeaveBalanceService leaveBalanceService;

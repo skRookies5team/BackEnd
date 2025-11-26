@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "회의실 예약", description = "회의실 예약 관리 API")
+@Tag(name = "Meeting", description = "회의실/회의 일정 API")
 public class ReservationController {
 
     private final ReservationService reservationService;
