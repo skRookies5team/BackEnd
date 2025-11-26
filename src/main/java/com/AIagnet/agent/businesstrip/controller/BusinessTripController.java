@@ -34,7 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "출장 관리", description = "출장 조회, 생성, 삭제, AI 챗봇 API")
+@Tag(name = "Business Trip", description = "출장 관리 API")
 public class BusinessTripController {
 
     private final BusinessTripService businessTripService;

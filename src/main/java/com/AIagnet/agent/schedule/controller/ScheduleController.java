@@ -36,7 +36,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "일정 관리", description = "일정 조회, 생성, 취소, AI 챗봇 API")
+@Tag(name = "Schedule", description = "일정/스케줄 관리 API")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;

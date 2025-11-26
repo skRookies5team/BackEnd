@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@Tag(name = "회의실 관리", description = "회의실 조회, 예약, 추천, AI 챗봇 API")
+@Tag(name = "Meeting", description = "회의실/회의 일정 API")
 public class MeetingRoomController {
 
     private final MeetingRoomService meetingRoomService;
