@@ -1,5 +1,6 @@
 package com.AIagnet.agent.leave.dto;
 
+import com.AIagnet.agent.common.dto.ChatRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveChatRequest {
+public class LeaveChatRequest implements ChatRequest {
 
     @NotBlank(message = "질문은 필수입니다.")
     private String query;

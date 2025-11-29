@@ -55,7 +55,7 @@ public class EmployeeResponse {
     private String dateOfBirth;
 
     /** 근속년수 */
-    private Integer yearsOfService;
+    private Double yearsOfService;
 
     /** 입사일 */
     private String hireDate;

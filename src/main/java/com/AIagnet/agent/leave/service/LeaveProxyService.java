@@ -1,74 +1,30 @@
 package com.AIagnet.agent.leave.service;
 
-import com.AIagnet.agent.exception.BusinessException;
-import com.AIagnet.agent.exception.ErrorCode;
+import com.AIagnet.agent.common.service.BaseFastApiProxyService;
+import com.AIagnet.agent.common.service.FastApiClient;
 import com.AIagnet.agent.leave.dto.LeaveChatRequest;
 import com.AIagnet.agent.leave.dto.LeaveChatResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
 
 /**
  * 연차 챗봇 프록시 서비스 (FastAPI 연동).
  */
 @Service
-@RequiredArgsConstructor
-@Slf4j
-public class LeaveProxyService {
+public class LeaveProxyService extends BaseFastApiProxyService<LeaveChatRequest, LeaveChatResponse> {
 
-    private final RestTemplate restTemplate;
+    public LeaveProxyService(FastApiClient fastApiClient, ObjectMapper objectMapper) {
+        super(fastApiClient, objectMapper);
+    }
 
-    @Value("${ai.fastapi.url}")
-    private String fastApiUrl;
+    @Override
+    protected String getAgentType() {
+        return "leave";
+    }
 
-    /**
-     * 연차 챗봇 요청을 FastAPI로 전달.
-     *
-     * @param request 챗봇 요청
-     * @return 챗봇 응답
-     */
-    public LeaveChatResponse chat(LeaveChatRequest request) {
-        String url = fastApiUrl + "/api/agents/leave/chat";
-
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            HashMap<String, Object> body = new HashMap<>();
-            body.put("query", request.getQuery());
-            if (request.getEmployeeId() != null) {
-                body.put("employee_id", request.getEmployeeId());
-            }
-
-            HttpEntity<HashMap<String, Object>> httpEntity = new HttpEntity<>(body, headers);
-
-            log.info("FastAPI 요청: {} - query={}, employeeId={}", url, request.getQuery(), request.getEmployeeId());
-
-            ResponseEntity<LeaveChatResponse> response = restTemplate.postForEntity(
-                    url, httpEntity, LeaveChatResponse.class);
-
-            log.info("FastAPI 응답: status={}, answer={}", response.getStatusCode(), response.getBody());
-
-            return response.getBody();
-
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            log.error("FastAPI HTTP 오류: status={}, body={}", e.getStatusCode(), e.getResponseBodyAsString(), e);
-            throw new BusinessException(ErrorCode.AI_AGENT_RESPONSE_ERROR);
-        } catch (RestClientException e) {
-            log.error("FastAPI 연결 오류: url={}", url, e);
-            throw new BusinessException(ErrorCode.AI_AGENT_CONNECTION_FAILED);
-        }
+    @Override
+    protected Class<LeaveChatResponse> getResponseClass() {
+        return LeaveChatResponse.class;
     }
 }
 
