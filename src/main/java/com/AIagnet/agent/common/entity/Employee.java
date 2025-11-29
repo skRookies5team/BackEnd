@@ -78,7 +78,7 @@ public class Employee {
 
     /** 근속년수 */
     @Column(name = "years_of_service")
-    private Integer yearsOfService;
+    private Double yearsOfService;
 
     /** 입사일 */
     @Column(name = "hire_date")
